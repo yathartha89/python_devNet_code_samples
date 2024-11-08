@@ -24,7 +24,7 @@ def netconf_conn(num,max_num):
 
          print("The netconf connection has not been EST successfully and the error is: ",e)
         
-         num+=1
+         num = num + 1
 
 def get_interface_config(commands,conn):
 
