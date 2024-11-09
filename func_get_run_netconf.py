@@ -47,7 +47,7 @@ if netconf:
    print("The final output is:")
    print()
 
-   time.sleep(2)
+   time.sleep(10)
 
    print(final_output)
 
