@@ -11,7 +11,7 @@ iosxe1 = {
 }
 
 xe = {
-   'ip': '10.10.20.48',
+   'host': '10.10.20.48',
    'username': 'admin',
    'password': 'cisco',
    'port': '830',
