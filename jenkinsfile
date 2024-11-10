@@ -1,0 +1,25 @@
+pipeline{
+    agent any
+    stages{
+        stage('Changing the directory to custom directory'){
+            steps{
+                dir('/Users/yathartha/python_code_examples/repo'){
+                    git url:'https://github.com/yathartha89/python_devNet_code_samples.git',branch:'main'
+                }
+            }
+        }
+        stage('Configuring the environment and executing the script'){
+            steps{
+                dir('/Users/yathartha/python_code_examples'){
+                    sh '''
+                    
+                    
+                    . myenv/bin/activate
+                    python3 repo/conf_interface_netconf.py
+                    '''
+                }
+            }
+        }
+        
+    }
+}
