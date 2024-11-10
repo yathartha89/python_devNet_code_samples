@@ -18,7 +18,7 @@ interface_config = """
          <enabled>true</enabled>
          <ipv4 xmlns = "urn:ietf:params:xml:ns:yang:ietf-ip">
             <address>
-               <ip>2.2.2.2</ip>
+               <ip>1.1.1.1</ip>
                <netmask>255.0.0.0</netmask>
             </address>
          </ipv4>
