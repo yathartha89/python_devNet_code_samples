@@ -1,0 +1,49 @@
+
+devices:
+
+   router1:
+
+      os: iosxe
+
+      type: router
+
+      connections:
+
+         cli:
+
+            protocol: ssh
+
+            ip: 10.10.20.48
+
+      credentials:
+
+         default:
+
+            username: admin
+
+            password: cisco
+
+   router2:
+
+      os: nxos
+
+      type: router
+
+      connections:
+
+         cli:
+
+            protocol: ssh
+
+            ip: 10.10.20.40
+
+      credentials:
+
+         default:
+
+            username: admin
+
+            password: RG!_Yw200
+
+      
+      
