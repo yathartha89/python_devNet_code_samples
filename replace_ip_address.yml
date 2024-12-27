@@ -1,0 +1,21 @@
+---
+
+- name: To replace the IP address
+
+  gather_facts: no
+
+  hosts: localhost
+
+  tasks:
+
+     - name: To replace the IP address of loopback0
+
+       replace:
+
+          path: backup/router1_config.2024-12-27@20:02:27
+
+          regexp: '(?m)^interface Loopback0\s+ip address \d+\.\d+\.\d+\.\d+ \d+\.\d+\.\d+\.\d+'
+
+          replace: 'interface Loopback0\n ip address 2.2.2.2 255.0.0.0'
+
+... 
