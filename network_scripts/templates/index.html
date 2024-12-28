@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Script</title>
+</head>
+<body>
+    <form id="scriptForm">
+        <label for="script_name">Script Name:</label>
+        <input type="text" id="script_name" name="script_name" required>
+        <button type="submit">Run Script</button>
+    </form>
+    <div id="output"></div>
+
+    <script>
+        const form = document.getElementById('scriptForm');
+        const outputDiv = document.getElementById('output');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const scriptName = formData.get('script_name');
+
+            try {
+                const response = await fetch('/run_script', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Update the output div with the result
+                outputDiv.innerHTML = `
+                    <p>Status: ${result.Status}</p>
+                    <p>Output: ${result.Output || 'No output'}</p>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                outputDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
+

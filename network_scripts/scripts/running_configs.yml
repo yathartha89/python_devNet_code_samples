@@ -1,0 +1,45 @@
+---
+
+- name: Gather running configurations
+
+  gather_facts: no
+
+  hosts: router1
+
+  tasks:
+
+     - name: To gather version and running_configs
+
+       ios_command:
+
+          commands:
+
+             - sh run
+
+             - sh version
+
+       register: ios_backup
+
+     - name: File the running_configs
+
+       copy:
+
+          content: "{{ ios_backup.stdout[0] }}"
+
+          dest: "{{ inventory_hostname }}_running_{{ lookup('pipe', 'date +%Y_%m_%d') }}.txt"
+
+     - name: File the version
+
+       copy:
+
+          content: "{{ ios_backup.stdout[1] }}"
+
+          dest: "{{ inventory_hostname }}_version_{{ lookup('pipe', 'date +%Y_%m_%d') }}.txt"
+
+          
+
+
+...
+
+
+
