@@ -1,91 +1,78 @@
 from genie.testbed import load
 
-
-
-testbed = load("testbed.yml")
-
-
-expect = {
+expected_output = { 
 
          "interface": {
 
-             "GigabitEthernet1": {
+                "GigabitEthernet1": {
 
-                   "status": "up",
+                          "status": "up",
 
-                   "protocol": "up"
+                          "protocol": "up",
+
+                          "ip": "10.10.20.48"
+ 
+
 },
-             "GigabitEthernet2": {
 
-                    "status": "up",
+                "GigabitEthernet2": {
 
-                    "protocol": "up"
+                          "status": "up",
 
+                          "protocol": "up",
 
+                          "ip": "10.10.20.40"
 
 }
 }
 }
-
 
 def connect():
    try:
+
+      testbed = load("testbed.yml")
 
       device = testbed.devices["router1"]
 
       device.connect(log_stdout=False)
 
-      print("The remote SSH connection has been EST successfully")
+      print("The SSH connection to the device has been EST successfully\n")
 
       return device
 
    except Exception as e:
 
-      print("The connection failed and the error is: ",e)
+      print("The SSH connection to the device is failed and the error is: ",e)
+
+def parsed_output(device):
+
+   return  device.parse("show ip int brief")
 
 
-def final_output(device):
+conn = connect()
 
-   return device.parse("show ip int brief")
+if conn:
 
+   actual_output = parsed_output(conn)
    
-def eva_output(parsed_output):
+   interfaces = actual_output["interface"]
 
-   interfaces = parsed_output["interface"]
+   expect = expected_output["interface"]
 
-   expected_output = expect["interface"]
+   for inter,details in expect.items():
 
-   for interface, details in expected_output.items():
+      if inter in interfaces:
 
-      if interface in interfaces:
+         if details["status"] == interfaces[inter]["status"] and details["protocol"] == interfaces[inter]["protocol"] and details["ip"] == interfaces[inter]["ip_address"]:
 
-         parsed_details = interfaces[interface]
-
-         if (parsed_details["status"] == details["status"] and parsed_details["protocol"] == details["protocol"]):
-
-            print(f"The interface {interface} is compliant")
+            print(f"The interface info of {inter} is compliant with the actual status of the interface\n")
 
          else:
 
-            print(f"The interface {interface} is not compliant and the details are as below")
+            print(f"The interface info of {inter} is not compliant with the actual status of the interface and the details are as below:\n")
 
-            print(f"Expected state is: {details['status']} and {details['protocol']}\n")
+            print(f"The expected output is: {details['status']} , {details['protocol']} and {details['ip']}\n")       
 
-            print(f"Actual state is: {parsed_details['status']} and {parsed_details['protocol']} ")
+            print(f"The actual output is: {interfaces[inter]['status']} , {interfaces[inter]['protocol']} and {interfaces[inter]['ip_address']}")
 
-      else:
-
-        print("The interface could not be found")
-
-
-
-device = connect()
-
-if device:
-
-   parsed_output = final_output(device)
-
-   eva_output(parsed_output)
-
-
-
+   
