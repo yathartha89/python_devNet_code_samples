@@ -70,7 +70,7 @@ def show_run(ip,username,password,device_type):
 
       conn = connection(ip,username,password,device_type)
 
-      click.echo("The SSH connection to ip has been EST")
+      click.echo(f"The SSH connection to {ip} has been EST")
 
       run = conn.send_command("show run")
 
@@ -81,5 +81,36 @@ def show_run(ip,username,password,device_type):
    except Exception as e:
 
       click.echo(f"The SSH connection to {ip} is failed and the error is: ",e)
+
+@device_tools.group()
+def device_config():
+   pass
+
+@device_config.command()
+@click.option('--ip',prompt='Device_ip',help='IP address of the device')
+@click.option('--username',prompt='username',help='username of the device')
+@click.option('--password',prompt='password',hide_input=True,help='Password of the device')
+@click.option('--device_type',prompt='Device_type',default='cisco_ios',show_default=True,help='Device_type of the device')
+
+def config_loopback(ip,username,password,device_type):
+   try:
+
+      conn = connection(ip,username,password,device_type)
+
+      click.echo("\n")
+      click.echo(f"The SSH connection has been EST with {ip}")
+
+      for i in range(4):
+
+         config_list = [f'no interface loopback{i}', 'no shut', 'description Loopback configured by YV using netmiko']
+
+         loopback = conn.send_config_set(config_list)
+
+         click.echo(loopback)
+         click.echo("\n")
+   
+   except Exception as e:
+      click.echo(f"The SSH connection is not EST and the error is {e}")
+
 
 device_tools()
